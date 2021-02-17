@@ -1,3 +1,14 @@
 @import "./abstracts/variables.scss";
 
 @import "./profile/profile.scss";
+
+@import "./pages/home.scss";
+
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background-color: $color_white;
+}
