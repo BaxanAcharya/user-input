@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { DataGrid } from "@material-ui/data-grid";
-import { IUser } from "../../interfaces/iuser";
+import { IUser } from "../../interfaces/IUser";
 import constants from "../../config/constants";
 import Action from "./Action";
 
