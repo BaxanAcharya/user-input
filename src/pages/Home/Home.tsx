@@ -80,7 +80,7 @@ const Home = (props: IProps) => {
 
   const addUser = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(creaeUser.phone.valueOf.length>7){
+    if(creaeUser.phone.length<7){
       return alert('At least 7 digit required for phone')
     }
     setUsers([...users, creaeUser]);
