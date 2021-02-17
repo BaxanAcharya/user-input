@@ -15,6 +15,7 @@ import UserTable from "../../component/UserTable";
 import { IUser } from "../../interfaces/IUser";
 import HttpClient from "../../services/api/Request";
 import { v4 as uuidv4 } from "uuid";
+import {Link} from 'react-router-dom'
 
 interface IProps {}
 
@@ -297,6 +298,8 @@ const Home = (props: IProps) => {
           <UserTable deleteUser={deleteUser} users={users}  editUser={editUser}/>
         </div>
       </Container>
+
+      <Button component={Link} to="/profile" > Profile</Button>
 {/* 
       {
         open? <EditForm createUser={creaeUser} setCreateUser={setCreateUser} handleEdit={handleEdit}/>:null
