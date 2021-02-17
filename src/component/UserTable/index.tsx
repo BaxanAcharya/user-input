@@ -4,7 +4,11 @@ import { IUser } from "../../interfaces/IUser";
 import constants from "../../config/constants";
 import Action from "./Action";
 
-interface IProps {}
+interface IProps {
+    deleteUser: (id: string) => void;
+    users: IUser[];
+    editUser:(id:string)=>void;
+}
 
 const UserTable = (props: IProps) => {
   const [selectedRow, setSelectedRow] = useState<string>();
@@ -62,25 +66,13 @@ const UserTable = (props: IProps) => {
         renderCell: (params: any) => (
           <strong>
             {params.value.id}
-            <Action id={selectedRow} />
+            <Action id={selectedRow} deleteUser={props.deleteUser}  editUser={props.editUser}/>
           </strong>
         ),
       },
   ];
 
-  const rows: IUser[] = [
-    {
-      id: "1",
-      name: "Lok",
-      email: "string",
-      phone: "string",
-      dob: "string",
-      city: "string",
-      district: "string",
-      province: 1,
-      country: "string",
-    },
-  ];
+  const rows: IUser[] = props.users;
 
   return (
     <DataGrid

@@ -3,25 +3,23 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import React, { useState } from 'react';
 import Delete from '../Delete';
-import { useHistory } from 'react-router-dom';
 
 interface IProps {
   id: string | undefined;
+  deleteUser: (id: string) => void;
+  editUser:(id:string)=>void;
 }
 const Action = (props: IProps) => {
   const [open, setOpen] = useState(false);
-  const history = useHistory();
 
   const handleClick = () => {
-    // deletePropertyTypeMutation({
-
-    // });
+    props.deleteUser(props.id as string);
   };
   const handleClose = () => {
     setOpen(!open);
   };
   const onEditClick = () => {
-    history.push(`/property-type/edit/${props?.id}`);
+    props.editUser(props.id as string);
   };
 
   const onDeleteClick = () => {

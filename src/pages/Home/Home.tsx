@@ -10,9 +10,11 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import UserTable from "../../component/UserTable";
+import { IUser } from "../../interfaces/IUser";
 import HttpClient from "../../services/api/Request";
+import { v4 as uuidv4 } from "uuid";
 
 interface IProps {}
 
@@ -62,7 +64,56 @@ const Home = (props: IProps) => {
   const classes = useStyles();
   const httpClient = new HttpClient();
   const [countries, setCountries] = useState<string[]>();
-  const getAllPosts = async () => {
+  const [users, setUsers] = useState<IUser[]>([]);
+  const [open,setOpen]=useState<boolean>(false);
+  const [creaeUser, setCreateUser] = useState<IUser>({
+    id: uuidv4(),
+    name: "",
+    email: "",
+    phone: "",
+    dob: "",
+    city: "",
+    district: "",
+    province: 0,
+    country: "",
+  });
+
+  const addUser = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if(creaeUser.phone.valueOf.length>7){
+      return alert('At least 7 digit required for phone')
+    }
+    setUsers([...users, creaeUser]);
+    setCreateUser({
+      id: uuidv4(),
+      name: "",
+      email: "",
+      phone: "",
+      dob: "",
+      city: "",
+      district: "",
+      province:  0,
+      country: "Nepal",
+    });
+  };
+
+  const deleteUser=(id: string)=>{
+    var filtered= users.filter(user=>{
+      return user.id!==id;
+    });
+    setUsers(filtered);
+  }
+
+  const editUser=(id: string)=>{
+    var filtered= users.filter(user=>{
+      return user.id===id;
+    });
+
+    setCreateUser(filtered[0]);
+    setOpen(true);
+  }
+
+  const getAllCountries = async () => {
     try {
       const response = await httpClient.get({
         endpoint: "/countries",
@@ -75,10 +126,18 @@ const Home = (props: IProps) => {
   };
 
   useEffect(() => {
-    getAllPosts();
-  });
+    getAllCountries();
+  }, []);
 
-  const handleChange = () => {};
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    setCreateUser({ ...creaeUser, [name]: value });
+  };
+
+  const handleEdit = ()=>{
+    //update  creauserdata
+  }
   return (
     <>
       <Container maxWidth="lg" className="home__container">
@@ -88,13 +147,15 @@ const Home = (props: IProps) => {
           <Typography component="h1" variant="h5">
             Add User
           </Typography>
-          <form className={classes.form}>
+          <form onSubmit={addUser} className={classes.form}>
             <TextField
               variant="outlined"
               margin="normal"
               required
               fullWidth
               id="name"
+              value={creaeUser.name}
+              onChange={handleChange}
               type="text"
               label="Name"
               name="name"
@@ -106,6 +167,8 @@ const Home = (props: IProps) => {
               margin="normal"
               required
               fullWidth
+              value={creaeUser.email}
+              onChange={handleChange}
               name="email"
               label="Email"
               type="email"
@@ -116,17 +179,22 @@ const Home = (props: IProps) => {
               margin="normal"
               required
               fullWidth
+              value={creaeUser.phone}
+              onChange={handleChange}
               name="phone"
               label="Phone No."
               type="number"
               id="phone"
+              
             />
             <TextField
               variant="outlined"
               margin="normal"
               required
+              onChange={handleChange}
+              value={creaeUser.dob}
               fullWidth
-              name="date"
+              name="dob"
               type="date"
               id="dob"
             />
@@ -138,16 +206,23 @@ const Home = (props: IProps) => {
               <Select
                 labelId="demo-customized-select-label"
                 id="demo-customized-select"
-                defaultValue="Default"
-                //   value={age}
-                onChange={handleChange}
+                defaultValue="Nepal"
+                value={creaeUser.country}
+                onChange={(e) =>
+                  setCreateUser({
+                    ...creaeUser,
+                    country: e.target.value as string,
+                  })
+                }
                 className={classes.input}
               >
                 <MenuItem value="Default">
-                  <em>Choose Here</em>
+                  <em>Nepal</em>
                 </MenuItem>
                 {countries?.map((country, index) => (
-                  <MenuItem key={index} value={country}>{country}</MenuItem>
+                  <MenuItem key={index} value={country}>
+                    {country}
+                  </MenuItem>
                 ))}
               </Select>
 
@@ -159,7 +234,13 @@ const Home = (props: IProps) => {
                 id="demo-customized-select"
                 defaultValue="Default"
                 //   value={age}
-                onChange={handleChange}
+                value={creaeUser.province}
+                onChange={(e) =>
+                  setCreateUser({
+                    ...creaeUser,
+                    province: e.target.value as number,
+                  })
+                }
                 className={classes.input}
               >
                 <MenuItem value="Default">
@@ -179,6 +260,8 @@ const Home = (props: IProps) => {
               margin="normal"
               required
               fullWidth
+              value={creaeUser.district}
+              onChange={handleChange}
               label="District"
               name="district"
               type="text"
@@ -189,6 +272,8 @@ const Home = (props: IProps) => {
               margin="normal"
               required
               fullWidth
+              onChange={handleChange}
+              value={creaeUser.city}
               label="City"
               name="city"
               type="text"
@@ -202,15 +287,20 @@ const Home = (props: IProps) => {
               variant="contained"
               color="primary"
               className={` button ${classes.submit}`}
+              disabled={!creaeUser.name||!creaeUser.email || !creaeUser.phone || !creaeUser.dob ||  !creaeUser.country || !creaeUser.province || !creaeUser.district || !creaeUser.city  }
             >
-              Sign In
+              Add
             </Button>
           </form>
         </div>
         <div className="home__table">
-          <UserTable />
+          <UserTable deleteUser={deleteUser} users={users}  editUser={editUser}/>
         </div>
       </Container>
+{/* 
+      {
+        open? <EditForm createUser={creaeUser} setCreateUser={setCreateUser} handleEdit={handleEdit}/>:null
+      } */}
     </>
   );
 };
