@@ -3,7 +3,6 @@
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  margin-top: 2%;
 }
 
 .home__address {
@@ -25,6 +24,7 @@
 .home__form {
   background-color: $form_background;
   padding: 5%;
+  width: 50%;
   border-radius: 16px;
 }
 
@@ -48,4 +48,13 @@
 
 .button {
   background-color: $color_primary;
+}
+
+.table__paper {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 750;
+}
+.home__table {
+  width: -webkit-fill-available;
 }

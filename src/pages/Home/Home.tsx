@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
+import UserTable from "../../component/UserTable";
 
 interface IProps {}
 
@@ -72,7 +73,8 @@ const Home = (props: IProps) => {
 
   }
   return (
-    <Container maxWidth="xs" className="home__container">
+    <>
+    <Container maxWidth="lg" className="home__container">
       <CssBaseline />
       <div className={`${classes.paper} home__form`} >
         <Avatar className={`button ${classes.avatar}`}></Avatar>
@@ -195,7 +197,14 @@ const Home = (props: IProps) => {
           </Button>
         </form>
       </div>
+      <div className="home__table">
+      <UserTable/> 
+      </div>
+
+      
     </Container>
+ 
+</>
   );
 };
 
